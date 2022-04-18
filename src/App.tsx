@@ -46,19 +46,19 @@ function App() {
     <BrowserRouter>
       <Menu />
       <div className="container">
-        {/* <Routes>
-          <Route path="/"> */}
+        <Routes>
+          <Route path="/">
             <h3>In Theaters</h3>
             <MoviesList movies={movies.inTheaters} />
 
             <h3>Upcoming Releases</h3>
             <MoviesList movies={movies.upcomingReleases} />
-          {/* </Route> */}
+          </Route>
 
-          {/* <Route path="/genres">*/}
+          <Route path="/genres">
             <IndexGenres />
-          {/* </Route> */}
-        {/* </Routes> */}
+          </Route>
+        </Routes>
       </div>
     </BrowserRouter>
   );
