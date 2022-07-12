@@ -1,5 +1,4 @@
 import { ReactElement } from "react";
-import { movieDTO } from "../movies/movies.model";
 import Loading from "./Loading";
 
 export default function GenericList(props: genericListProps) {

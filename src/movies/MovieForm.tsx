@@ -13,6 +13,7 @@ import { genresDTO } from "../genres/genres.model";
 import { movieTheaterDTO } from "../movietheaters/movieTheater.model";
 import TypeAheadActors from "../forms/TypeAheadActors";
 import { actorMovieDTO } from "../actors/actors.model";
+import MarkdownField from "../forms/MarkdownField";
 
 export default function MovieForm(props: movieFormProps) {
 
@@ -43,9 +44,10 @@ export default function MovieForm(props: movieFormProps) {
                 props.onSubmit(values, actions);
             }}
             validationSchema={Yup.object({
-                title: Yup.string().required('This string is required').firstLetterUppercase()
-            })}
-        >
+                title: Yup.string()
+                    .required('This field is required')
+                    .firstLetterUppercase()
+            })}>
             {(formikProps) => (
                 <Form>
                     <TextField
@@ -64,6 +66,9 @@ export default function MovieForm(props: movieFormProps) {
                         displayName="Poster"
                         field="poster"
                         imageURL={props.model.posterURL} />
+                    <MarkdownField
+                        displayName="Summary"
+                        field="summary" />
                     <MultipleSelector
                         displayName="Genres"
                         nonSelected={nonSelectedGenres}
@@ -102,10 +107,11 @@ export default function MovieForm(props: movieFormProps) {
                                         actors[index].characterName = e.currentTarget.value;
                                         setSelectedActors(actors);
                                     }} />
-                            </>} />
+                            </>}
+                    />
 
                     <Button disabled={formikProps.isSubmitting} type="submit">Save Changes</Button>
-                    <Link className="btn btn-secondary" to="/genres">Cancel</Link>
+                    <Link className="btn btn-secondary" to="/movies">Cancel</Link>
                 </Form>
             )}
         </Formik>

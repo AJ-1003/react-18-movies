@@ -1,12 +1,11 @@
-import { Form, Formik, FormikHandlers, FormikHelpers } from "formik";
+import { Form, Formik, FormikHelpers } from "formik";
 import { Link } from "react-router-dom";
-import TextField from "../forms/TextField";
-import Button from "../utils/Button";
-import Map from "../utils/Map";
-import { movieTheaterCreationDTO } from "./movieTheater.model";
 import * as Yup from 'yup';
 import MapField from "../forms/MapField";
+import TextField from "../forms/TextField";
+import Button from "../utils/Button";
 import coordinateDTO from "../utils/coordinates.model";
+import { movieTheaterCreationDTO } from "./movieTheater.model";
 
 export default function MovieTheaterForm(props: movieTheaterProps) {
 

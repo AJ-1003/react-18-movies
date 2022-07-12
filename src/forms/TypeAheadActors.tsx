@@ -1,33 +1,26 @@
+import axios, { AxiosResponse } from "axios";
 import { ReactElement, useState } from "react";
-import { Typeahead } from "react-bootstrap-typeahead";
+import { AsyncTypeahead } from "react-bootstrap-typeahead";
 import { actorMovieDTO } from "../actors/actors.model";
+import { urlActors } from "../endpoints";
 
 export default function TypeAheadActors(props: typeAheadActorsProps) {
 
     const [draggedElement, setDraggedElement] = useState<actorMovieDTO | undefined>(undefined);
-
-    const actors: actorMovieDTO[] = [
-        {
-            id: 1,
-            name: "Koos",
-            characterName: "",
-            picture: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Deadpool_2_Japan_Premiere_Red_Carpet_Ryan_Reynolds_%28cropped%29.jpg/220px-Deadpool_2_Japan_Premiere_Red_Carpet_Ryan_Reynolds_%28cropped%29.jpg"
-        },
-        {
-            id: 2,
-            name: "Piet",
-            characterName: "",
-            picture: ""
-        },
-        {
-            id: 3,
-            name: "Saartjie",
-            characterName: "",
-            picture: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Kaley_Cuoco_by_Gage_Skidmore.jpg/220px-Kaley_Cuoco_by_Gage_Skidmore.jpg"
-        }
-    ]
+    const [actors, setActors] = useState<actorMovieDTO[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const selected: actorMovieDTO[] = [];
+
+    function handleSearch(query: string) {
+        setIsLoading(true);
+
+        axios.get(`${urlActors}/searchByName/${query}`)
+            .then((response: AxiosResponse<actorMovieDTO[]>) => {
+                setActors(response.data);
+                setIsLoading(false);
+            })
+    }
 
     function handleDragStart(actor: actorMovieDTO) {
         setDraggedElement(actor);
@@ -51,19 +44,22 @@ export default function TypeAheadActors(props: typeAheadActorsProps) {
 
     return (
         <div className="mb-3">
-            <label>{props.displayName}</label>
-            <Typeahead
+            <label className="form-label">{props.displayName}</label>
+            <AsyncTypeahead
                 id="typeahead"
                 onChange={actors => {
                     // check if the selected is already in the list
                     if (props.actors.findIndex(x => x.id === actors[0].id) === -1) {
+                        actors[0].characterName = "";
                         props.onAdd([...props.actors, actors[0]]);
                     }
-                    console.log(actors);
+                    // console.log(actors);
                 }}
                 options={actors}
                 labelKey={actor => actor.name}
-                filterBy={["name"]}
+                filterBy={() => true}
+                isLoading={isLoading}
+                onSearch={handleSearch}
                 placeholder="Write the name of the actor..."
                 minLength={1}
                 flip={true}
@@ -88,7 +84,8 @@ export default function TypeAheadActors(props: typeAheadActorsProps) {
                         className="list-group-item list-group-item-action"
                         draggable={true}
                         onDragStart={() => handleDragStart(actor)}
-                        onDragOver={() => handleDragOver(actor)}>
+                        onDragOver={() => handleDragOver(actor)}
+                    >
                         {props.listUI(actor)}
                         <span
                             className="badge badge-primary badge-pill pointer text-dark"

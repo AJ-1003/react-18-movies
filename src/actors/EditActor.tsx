@@ -1,19 +1,35 @@
+import { transform } from "typescript";
+import { urlActors } from "../endpoints";
+import EditEntity from "../utils/EditEntity";
+import { convertActorToFormData } from "../utils/formDataUtils";
 import ActorForm from "./ActorForm";
+import { actorCreationDTO, actorDTO } from "./actors.model";
 
 export default function EditActor() {
+
+    function transform(actor: actorDTO): actorCreationDTO {
+        return {
+            name: actor.name,
+            pictureURL: actor.picture,
+            biography: actor.biography,
+            dateOfBirth: actor.dateOfBirth
+        }
+    }
+
     return (
-        <>
-            <h3>Edit Actor</h3>
-            <ActorForm
-                model={{
-                    name: 'Kaley Cuoco',
-                    dateOfBirth: new Date('1972-06-24T00:00:00'),
-                    biography: `# Kaley Cuoco
-                    
-This person was born in **USA**`,
-                    pictureURL: 'https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTgxMTI4MTkyMTUxNTI4ODA4/gettyimages-841034812.jpg'
-                }}
-                onSubmit={values => console.log(values)} />
-        </>
+        <EditEntity<actorCreationDTO, actorDTO>
+            url={urlActors}
+            indexURL="/actors"
+            entityName="Actor"
+            transformFormData={convertActorToFormData}
+            transform={transform}>
+            {(entity, edit) =>
+                <ActorForm
+                    model={entity}
+                    onSubmit={async values =>
+                        // await edit(values)
+                    console.log(values)} />
+            }
+        </EditEntity>
     )
 }

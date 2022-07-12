@@ -1,13 +1,36 @@
-import { Link } from "react-router-dom";
+import { urlGenres } from "../endpoints";
+import IndexEntity from "../utils/IndexEntity";
+import { genresDTO } from "./genres.model";
 
 export default function IndexGenres() {
     return (
         <>
-            <h3>Genres</h3>
-            <p>This will display all genres listed in the DB</p>
-            <Link className="btn btn-primary" to="/genres/create">
-                Create Genre
-            </Link>
+            <IndexEntity<genresDTO>
+                url={urlGenres}
+                createUrl="/genres/create"
+                title="Genres"
+                entityName="Genre">
+                {(genres, buttons) =>
+                    <>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {genres?.map(genre =>
+                                <tr key={genre.id}>
+                                    <td>
+                                        {genre.name}
+                                    </td>
+                                    <td>
+                                        {buttons(`/genres/edit/${genre.id}`, genre.id)}
+                                    </td>
+                                </tr>)}
+                        </tbody>
+                    </>}
+            </IndexEntity>
         </>
     )
 }

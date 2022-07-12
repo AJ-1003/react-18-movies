@@ -48,13 +48,15 @@ export default function EditMovie() {
                 title: "Spiderman",
                 inTheaters: true,
                 trailer: "url",
-                releasedDate: new Date('2022-06-27T00:00:00')
+                releaseDate: new Date('2022-06-27T00:00:00')
             }}
                 onSubmit={values => console.log(values)}
                 selectedGenres={selectedGenres}
                 nonSelectedGenres={nonSelectedGenres}
+
                 selectedMovieTheaters={selectedMovieTheaters}
                 nonSelectedMovieTheaters={nonSelectedMovieTheaters}
+
                 selectedActors={selectedActors} />
         </>
     )

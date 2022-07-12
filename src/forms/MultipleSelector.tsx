@@ -28,7 +28,7 @@ export default function MultipleSelector(props: multipleSelectorProps) {
 
     return (
         <div className="mb-3">
-            <label>{props.displayName}</label>
+            <label className="form-label">{props.displayName}</label>
             <div className="multiple-selector">
                 <ul>
                     {props.nonSelected.map(item =>

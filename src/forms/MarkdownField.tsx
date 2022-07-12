@@ -9,13 +9,13 @@ export default function MarkdownField(props: markDownFieldProps) {
     return (
         <div className="mb-3 form-markdown">
             <div>
-                <label>{props.displayName}</label>
+                <label className="form-label">{props.displayName}</label>
                 <div>
                     <Field name={props.field} as="textarea" className="form-textarea" />
                 </div>
             </div>
             <div>
-                <label>{props.displayName} (preview):</label>
+                <label className="form-label">{props.displayName} (preview):</label>
                 <div className="markdown-container">
                     <ReactMarkdown>{values[props.field]}</ReactMarkdown>
                 </div>

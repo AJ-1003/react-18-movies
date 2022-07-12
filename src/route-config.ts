@@ -17,6 +17,7 @@ import CreateMovie from "./movies/CreateMovie";
 import EditMovie from "./movies/EditMovie";
 import FilterMovies from "./movies/FilterMovies";
 import RedirectToLandingPage from "./utils/RedirectToLandingPage";
+import MovieDetails from "./movies/MovieDetails";
 
 const routes = [
     // Home
@@ -79,6 +80,10 @@ const routes = [
     {
         path: '/movies/filter',
         component: FilterMovies
+    },
+    {
+        path: '/movie/:id(\\d+)',
+        component: MovieDetails
     },
     // Catch all parameter
     {
