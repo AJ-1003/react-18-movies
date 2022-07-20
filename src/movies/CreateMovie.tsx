@@ -30,14 +30,14 @@ export default function CreateMovie() {
     async function create(movie: movieCreationDTO) {
         try {
             const formData = convertMovieToFormData(movie);
-            await axios({
+            var response = await axios({
                 method: "post",
                 url: urlMovies,
                 data: formData,
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
-            navigate(`/movies`);
+            navigate(`/movie/${response.data}`);
         }
         catch (error) {
             setErrors(error.response.data);

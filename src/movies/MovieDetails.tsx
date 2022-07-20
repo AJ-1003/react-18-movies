@@ -2,11 +2,13 @@ import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Link, useParams } from "react-router-dom";
-import { urlMovies } from "../endpoints";
+import { urlMovies, urlRatings } from "../endpoints";
 import Map from "../utils/Map";
 import coordinateDTO from "../utils/coordinates.model";
 import Loading from "../utils/Loading";
 import { movieDTO } from "./movies.model";
+import Ratings from "../utils/Ratings";
+import Swal from "sweetalert2";
 
 export default function MovieDetails() {
 
@@ -49,6 +51,19 @@ export default function MovieDetails() {
         return [];
     }
 
+    function handleRate(rate: number) {
+        axios.post(urlRatings, {
+            rating: rate,
+            movieId: id
+        })
+            .then(() => {
+                Swal.fire({
+                    title: "Rating received",
+                    icon: "success"
+                })
+            })
+    }
+
     return (
         movie ?
             <div>
@@ -58,13 +73,19 @@ export default function MovieDetails() {
                         key={genre.id}
                         className="btn btn-primary btn-sm rounded-pill"
                         to={`/movies/filter?genreId=${genre.id}`}>
-                        {genre.name}</Link>)} | {movie.releaseDate.toDateString()}
+                        {genre.name}</Link>)} | 
+                {movie.releaseDate.toDateString()} |
+                Your rating: <Ratings
+                    maximumValue={5}
+                    selectedValue={movie.userRating}
+                    onChange={handleRate} /> |
+                    Average rating: {movie.averageRating}
 
                 <div style={{ display: 'flex', marginTop: '1rem' }}>
                     <span style={{ display: 'inline-block', marginRight: '1rem' }}>
                         <img src={movie.poster} alt="poster" style={{ width: '225px', height: '315px' }} />
                     </span>
-                    {movie.trailer ?
+                    {/* {movie.trailer ?
                         <div>
                             <iframe
                                 title="youtube-trailer"
@@ -75,7 +96,7 @@ export default function MovieDetails() {
                                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen>
                             </iframe>
-                        </div> : null}
+                        </div> : null} */}
                 </div>
 
                 {movie.summary ?
@@ -102,11 +123,11 @@ export default function MovieDetails() {
                         </div>
                     </div> : null}
 
-                    {movie.movieTheaters && movie.movieTheaters.length > 0 ?
+                {movie.movieTheaters && movie.movieTheaters.length > 0 ?
                     <div>
                         <h2>Showing on</h2>
                         <Map coordinates={transformCoordinates()} readOnly={true} />
-                    </div> : null }
+                    </div> : null}
             </div> : <Loading />
     )
 }

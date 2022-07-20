@@ -16,8 +16,16 @@ import LandingPage from "./movies/LandingPage";
 import CreateMovie from "./movies/CreateMovie";
 import EditMovie from "./movies/EditMovie";
 import FilterMovies from "./movies/FilterMovies";
-import RedirectToLandingPage from "./utils/RedirectToLandingPage";
 import MovieDetails from "./movies/MovieDetails";
+// Register
+import Register from "./auth/Register";
+// Login
+import Login from "./auth/Login";
+// Users
+import IndexUsers from "./auth/IndexUsers";
+
+import RedirectToLandingPage from "./utils/RedirectToLandingPage";
+
 
 const routes = [
     // Home
@@ -30,65 +38,92 @@ const routes = [
     {
         path: '/genres',
         component: IndexGenres,
-        exact: true
+        exact: true,
+        isAdmin: false
     },
     {
         path: '/genres/create',
-        component: CreateGenre
+        component: CreateGenre,
+        isAdmin: true
     },
     {
         path: '/genres/edit/:id',
-        component: EditGenre
+        component: EditGenre,
+        isAdmin: true
     },
     // Actors
     {
         path: '/actors',
         component: IndexActors,
-        exact: true
+        exact: true,
+        isAdmin: true
     },
     {
         path: '/actors/create',
-        component: CreateActor
+        component: CreateActor,
+        isAdmin: true
     },
     {
         path: '/actors/edit/:id',
-        component: EditActor
+        component: EditActor,
+        isAdmin: true
     },
     // Movie Theaters
     {
         path: '/movietheaters',
         component: IndexMovieTheaters,
-        exact: true
+        exact: true,
+        isAdmin: true
     },
     {
         path: '/movietheaters/create',
-        component: CreateMovieTheater
+        component: CreateMovieTheater,
+        isAdmin: true
     },
     {
         path: '/movietheaters/edit/:id',
-        component: EditMovieTheater
+        component: EditMovieTheater,
+        isAdmin: true
     },
     // Movies
     {
         path: '/movies/create',
         component: CreateMovie,
+        isAdmin: true
     },
     {
         path: '/movies/edit/:id',
-        component: EditMovie
+        component: EditMovie,
+        isAdmin: true
     },
     {
         path: '/movies/filter',
         component: FilterMovies
     },
     {
-        path: '/movie/:id(\\d+)',
+        path: '/movie/:id',
         component: MovieDetails
     },
     // Catch all parameter
     {
         path: '*',
         component: RedirectToLandingPage
+    },
+    // Register
+    {
+        path: '/register',
+        component: Register
+    },
+    // Login
+    {
+        path: '/login',
+        component: Login
+    },
+    // Users
+    {
+        path: '/users',
+        component: IndexUsers,
+        isAdmin: true
     }
 ];
 

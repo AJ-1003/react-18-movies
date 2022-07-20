@@ -14,6 +14,8 @@ export interface movieDTO {
     genres: genresDTO[];
     movieTheaters: movieTheaterDTO[];
     actors: actorMovieDTO[];
+    userRating: number;
+    averageRating: number;
 }
 
 export interface movieCreationDTO {
@@ -37,4 +39,13 @@ export interface landingPageDTO {
 export interface moviesPostGetDTO {
     genres: genresDTO[];
     movieTheaters: movieTheaterDTO[];
+}
+
+export interface moviePutGetDTO {
+    movie: movieDTO;
+    selectedGenres: genresDTO[];
+    nonSelectedGenres: genresDTO[];
+    selectedMovieTheaters: movieTheaterDTO[];
+    nonSelectedMovieTheaters: movieTheaterDTOp[];
+    actors: actorMovieDTO[];
 }

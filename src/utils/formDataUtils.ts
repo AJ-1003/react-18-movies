@@ -11,7 +11,7 @@ export function convertActorToFormData(actor: actorCreationDTO): FormData {
     }
 
     if (actor.dateOfBirth) {
-        formData.append('dateOfBirth', fomatDate(actor.dateOfBirth));
+        formData.append('dateOfBirth', formatDate(actor.dateOfBirth));
     }
 
     if (actor.picture) {
@@ -29,7 +29,7 @@ export function convertMovieToFormData(movie: movieCreationDTO) {
     formData.append('trailer', movie.trailer);
 
     if (movie.releaseDate) {
-        formData.append('releaseDate', fomatDate(movie.releaseDate));
+        formData.append('releaseDate', formatDate(movie.releaseDate));
     }
 
     if (movie.poster) {
@@ -47,7 +47,7 @@ export function convertMovieToFormData(movie: movieCreationDTO) {
     return formData;
 }
 
-function fomatDate(date: Date) {
+function formatDate(date: Date) {
     date = new Date(date);
     const format = new Intl.DateTimeFormat('en', {
         year: "numeric",

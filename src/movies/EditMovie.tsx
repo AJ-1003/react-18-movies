@@ -1,63 +1,67 @@
-import { actorMovieDTO } from "../actors/actors.model";
-import { genresDTO } from "../genres/genres.model";
-import { movieTheaterDTO } from "../movietheaters/movieTheater.model";
+import axios, { AxiosResponse } from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { urlMovies } from "../endpoints";
+import DisplayErrors from "../utils/DisplayErrors";
+import { convertMovieToFormData } from "../utils/formDataUtils";
+import Loading from "../utils/Loading";
 import MovieForm from "./MovieForm";
+import { movieCreationDTO, moviePutGetDTO } from "./movies.model";
 
 export default function EditMovie() {
 
-    const selectedGenres: genresDTO[] = [
-        {
-            id: 1,
-            name: "Comedy"
-        }
-    ]
-    const nonSelectedGenres: genresDTO[] = [
-        {
-            id: 2,
-            name: "Action"
-        }
-    ]
+    const { id }: any = useParams();
+    const [movie, setMovie] = useState<movieCreationDTO>();
+    const [moviePutGetDTO, setMoviePutGetDTO] = useState<moviePutGetDTO>();
+    const [errors, setErrors] = useState<string[]>();
+    const navigate = useNavigate();
 
-    const selectedMovieTheaters: movieTheaterDTO[] = [
-        {
-            id: 1,
-            name: "NuMetro"
-        }
-    ]
+    useEffect(() => {
+        axios.get(`${urlMovies}/PutGet/${id}`)
+            .then((response: AxiosResponse<moviePutGetDTO>) => {
+                const model: movieCreationDTO = {
+                    title: response.data.movie.title,
+                    inTheaters: response.data.movie.inTheaters,
+                    trailer: response.data.movie.trailer,
+                    posterURL: response.data.movie.poster,
+                    summary: response.data.movie.summary,
+                    releaseDate: new Date(response.data.movie.releaseDate)
+                };
+                setMovie(model);
+                setMoviePutGetDTO(response.data);
+            })
+    }, [id]);
 
-    const nonSelectedMovieTheaters: movieTheaterDTO[] = [
-        {
-            id: 2,
-            name: "Sterkinikor"
+    async function edit(movieToEdit: movieCreationDTO) {
+        try {
+            const formData = convertMovieToFormData(movieToEdit);
+            await axios({
+                method: "put",
+                url: `${urlMovies}/${id}`,
+                data: formData,
+                headers: { 'Content-Type': 'multipart/form-data' }
+            })
+            navigate(`/movie/${id}`);
+        } catch (error) {
+            setErrors(error.response.data);
         }
-    ]
-
-    const selectedActors: actorMovieDTO[] = [
-        {
-            id: 3,
-            name: "Saartjie",
-            characterName: "Penny",
-            picture: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Kaley_Cuoco_by_Gage_Skidmore.jpg/220px-Kaley_Cuoco_by_Gage_Skidmore.jpg"
-        }
-    ]
+    }
 
     return (
         <>
             <h3>Edit Movie</h3>
-            <MovieForm model={{
-                title: "Spiderman",
-                inTheaters: true,
-                trailer: "url",
-                releaseDate: new Date('2022-06-27T00:00:00')
-            }}
-                onSubmit={values => console.log(values)}
-                selectedGenres={selectedGenres}
-                nonSelectedGenres={nonSelectedGenres}
+            <DisplayErrors errors={errors} />
+            {movie && moviePutGetDTO ?
+                <MovieForm model={movie}
+                    onSubmit={async values => await edit(values)}
+                    selectedGenres={moviePutGetDTO.selectedGenres}
+                    nonSelectedGenres={moviePutGetDTO.nonSelectedGenres}
 
-                selectedMovieTheaters={selectedMovieTheaters}
-                nonSelectedMovieTheaters={nonSelectedMovieTheaters}
+                    selectedMovieTheaters={moviePutGetDTO.selectedMovieTheaters}
+                    nonSelectedMovieTheaters={moviePutGetDTO.nonSelectedMovieTheaters}
 
-                selectedActors={selectedActors} />
+                    selectedActors={moviePutGetDTO.actors}
+                /> : <Loading />}
         </>
     )
 }
